@@ -1,0 +1,14 @@
+{
+    "timestamp": "2026-02-06T03:50:00.000000",
+    "status": "VALIDATED",
+    "metrics": {
+        "current_population": "8274102481",
+        "births_today": "142500",
+        "deaths_today": "62400",
+        "public_healthcare_spending": "4205809200",
+        "public_education_spending": "3102405800",
+        "military_spending_today": "5204802100",
+        "co2_emissions_tons": "34102842",
+        "forest_loss_hectares": "12402"
+    }
+}
