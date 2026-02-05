@@ -1,0 +1,74 @@
+{
+  "system_info": {
+    "version": "2.6.0",
+    "deployment_year": 2026,
+    "environment": "Global Command Center",
+    "update_interval_seconds": 3600
+  },
+  "sources": {
+    "worldometer": {
+      "base_url": "https://www.worldometers.info/",
+      "metrics_to_track": [
+        "current_population",
+        "births_today",
+        "deaths_today",
+        "public_healthcare_spending",
+        "education_spending",
+        "military_spending",
+        "co2_emissions_tons"
+      ],
+      "scraping_method": "BeautifulSoup4"
+    },
+    "wef_strategic_intelligence": {
+      "name": "World Economic Forum",
+      "api_endpoint": "https://intelligence.weforum.org/api/v1/topics/",
+      "target_themes": [
+        "Global Risks 2026",
+        "Spirit of Dialogue",
+        "Artificial Intelligence",
+        "Geoeconomic Confrontation"
+      ],
+      "api_key": "YOUR_WEF_API_KEY_HERE"
+    },
+    "gdelt_global_narrative": {
+      "name": "GDELT Project",
+      "api_v2_endpoint": "https://api.gdeltproject.org/api/v2/doc/doc",
+      "query_params": {
+        "query": "2026 global agenda OR election OR conflict",
+        "format": "json",
+        "max_results": 100
+      }
+    },
+    "financial_indices": {
+      "alpha_vantage": {
+        "base_url": "https://www.alphavantage.co/query",
+        "api_key": "YOUR_ALPHA_VANTAGE_KEY",
+        "symbols": ["SPY", "BTC", "GOLD", "USD/MYR"]
+      },
+      "world_bank": {
+        "base_url": "https://api.worldbank.org/v2/country/all/indicator/",
+        "indicators": ["NY.GDP.MKTP.CD", "FP.CPI.TOTL.ZG"]
+      }
+    },
+    "academic_research": {
+      "open_alex": {
+        "base_url": "https://api.openalex.org/works",
+        "filter": "publication_year:2026",
+        "topics": ["Quantum Computing", "Climate Engineering", "Social Governance"]
+      }
+    }
+  },
+  "validation_rules": {
+    "population_min_threshold": 8200000000,
+    "max_data_age_hours": 24,
+    "strict_mode": true
+  },
+  "outputs": {
+    "log_directory": "data/logs/",
+    "dashboard_refresh_rate": 300,
+    "alert_integration": {
+      "slack_webhook": "YOUR_SLACK_WEBHOOK_URL",
+      "discord_webhook": "YOUR_DISCORD_WEBHOOK_URL"
+    }
+  }
+}
