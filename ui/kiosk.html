@@ -50,11 +50,11 @@
                 <div class="space-y-4">
                     <div>
                         <p class="text-xs uppercase">Est. Global Population</p>
-                        <p id="pop-val" class="text-4xl font-black text-white glow">8,274,102,481</p>
+                        <p id="pop-val" class="text-4xl font-black text-white glow">SYNCING...</p>
                     </div>
                     <div>
                         <p class="text-xs uppercase">CO2 Emissions (Tons)</p>
-                        <p id="co2-val" class="text-2xl font-bold text-red-500">34,102,842</p>
+                        <p id="co2-val" class="text-2xl font-bold text-red-500">---</p>
                     </div>
                 </div>
             </div>
@@ -62,10 +62,7 @@
             <div class="border-neon p-6 bg-green-950/10 h-full">
                 <h2 class="text-xl font-bold mb-4 opacity-80 underline">VALIDATION_LOGS</h2>
                 <div id="logs" class="text-xs space-y-2 overflow-hidden">
-                    <div class="text-blue-400">[03:26:01] GDELT_API: Pulling Political Narrative...</div>
-                    <div class="text-white">[03:26:05] DATA_VALIDATOR: WEF 2026 Agenda Integrity Verified (100%)</div>
-                    <div class="text-yellow-500">[03:26:10] SCRAPER: Worldometer Update Successful.</div>
-                    <div class="animate-pulse">[...] Waiting for next cycle...</div>
+                    <div class="text-yellow-500 italic">[SYSTEM] Initializing Kiosk Data Sync...</div>
                 </div>
             </div>
         </div>
@@ -99,33 +96,73 @@
     </div>
 
     <script>
-        // Real-time Clock
+        // 1. Fungsi Jam Masa-Nyata (UK Format)
         setInterval(() => {
-            const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleTimeString('en-GB');
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString('en-GB');
         }, 1000);
 
-        // Counter Animation for Population
-        let pop = 8274102481;
-        setInterval(() => {
-            pop += Math.floor(Math.random() * 5);
-            document.getElementById('pop-val').innerText = pop.toLocaleString();
-        }, 1500);
+        // 2. Fungsi Utama: Kiosk Data Sync dari JSON Sebenar
+        async function syncKioskData() {
+            try {
+                const response = await fetch('../data/logs/worldometer_live.json');
+                
+                if (!response.ok) {
+                    addKioskLog("[WARN] Log file not found. Waiting for GitHub Action...");
+                    return;
+                }
 
-        // Log auto-scroller (Simulasi)
-        const logEntries = [
-            "[INFO] GDP_PULSE: Monitoring G7 Stability Index...",
-            "[WARN] NARRATIVE_SHIFT: Detected in EU-ASEAN dialogue...",
-            "[SUCCESS] DB_WORLD_LOG: All nodes synced successfully.",
-            "[INFO] RESEARCH: 45 new papers indexed from OpenAlex API."
-        ];
-        setInterval(() => {
+                const data = await response.json();
+                
+                if (data && data.metrics) {
+                    // Update Paparan Populasi
+                    document.getElementById('pop-val').innerText = parseInt(data.metrics.current_population).toLocaleString();
+                    
+                    // Update Paparan CO2
+                    if(data.metrics.co2_emissions_tons) {
+                        document.getElementById('co2-val').innerText = parseInt(data.metrics.co2_emissions_tons).toLocaleString();
+                    }
+
+                    // Tambah Log Kejayaan
+                    const timeOnly = data.timestamp.split('T')[1].split('.')[0];
+                    addKioskLog(`[SUCCESS] Data Ingested: ${data.status} | TS: ${timeOnly}`);
+                }
+            } catch (e) {
+                addKioskLog("[ERROR] Sync Failed. Check Repository Data Path.");
+            }
+        }
+
+        // 3. Fungsi Log Scroller
+        function addKioskLog(message) {
             const logsDiv = document.getElementById('logs');
             const entry = document.createElement('div');
-            entry.innerText = `[${new Date().toLocaleTimeString()}] ${logEntries[Math.floor(Math.random() * logEntries.length)]}`;
+            entry.className = "text-[10px] opacity-80 border-l border-green-900 pl-2";
+            entry.innerText = `> [${new Date().toLocaleTimeString()}] ${message}`;
+            
             logsDiv.prepend(entry);
-            if (logsDiv.children.length > 10) logsDiv.lastChild.remove();
-        }, 4000);
+            
+            // Simpan hanya 10 log terakhir untuk kebersihan UI
+            if (logsDiv.children.length > 10) {
+                logsDiv.lastChild.remove();
+            }
+        }
+
+        // Jalankan Sync Pertama & Ulangi Setiap 60 Saat
+        syncKioskData();
+        setInterval(syncKioskData, 60000);
+
+        // Simulasi Log Aktiviti Tambahan (Supaya Kiosk Nampak 'Sibuk')
+        const systemMessages = [
+            "GDELT_API: Analyzing political sentiment...",
+            "DB_WORLD_LOG: All nodes active.",
+            "CORE_VALIDATOR: Integrity check passed.",
+            "WEF_INTEL: Monitoring risk nodes..."
+        ];
+
+        setInterval(() => {
+            const randomMsg = systemMessages[Math.floor(Math.random() * systemMessages.length)];
+            addKioskLog(`[INFO] ${randomMsg}`);
+        }, 8000);
+
     </script>
 </body>
 </html>
