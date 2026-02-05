@@ -10,7 +10,7 @@
         body {
             font-family: 'Fira Code', monospace;
             background-color: #000;
-            color: #00ff41; /* Classic Matrix/Terminal Green */
+            color: #00ff41; /* Classic Matrix Green */
             overflow: hidden;
         }
         .scanline {
@@ -19,6 +19,8 @@
             background: rgba(0, 255, 65, 0.1);
             position: absolute;
             animation: move 8s linear infinite;
+            pointer-events: none;
+            z-index: 100;
         }
         @keyframes move {
             0% { top: 0; }
@@ -26,6 +28,7 @@
         }
         .glow { text-shadow: 0 0 10px #00ff41; }
         .border-neon { border: 1px solid #00ff41; box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); }
+        .bg-matrix { background: rgba(0, 20, 0, 0.9); }
     </style>
 </head>
 <body class="p-8 relative">
@@ -33,136 +36,134 @@
 
     <div class="flex justify-between items-end border-b-2 border-green-900 pb-4 mb-8">
         <div>
-            <h1 class="text-4xl font-bold glow">SYSTEM: DATABASE-WORLD-LOG</h1>
-            <p class="text-xl opacity-70">NODE_LOCATION: GLOBAL_HUB_2026</p>
+            <h1 class="text-4xl font-bold glow uppercase tracking-tighter">System: Database-World-Log</h1>
+            <p class="text-xl opacity-70">Node: MY_KUALA_LUMPUR_2026</p>
         </div>
         <div class="text-right">
             <div id="clock" class="text-5xl font-bold">00:00:00</div>
-            <p class="text-sm">SECURITY_LEVEL: ALPHA_ENCRYPTED</p>
+            <p class="text-sm">STATUS: <span class="animate-pulse">ALPHA_SYNC_ACTIVE</span></p>
         </div>
     </div>
 
     <div class="grid grid-cols-3 gap-8 h-[75vh]">
         
         <div class="space-y-6">
-            <div class="border-neon p-6 bg-green-950/10">
-                <h2 class="text-2xl font-bold mb-4 bg-green-900 text-black px-2 uppercase italic">Live World Stats</h2>
+            <div class="border-neon p-6 bg-matrix">
+                <h2 class="text-2xl font-bold mb-4 bg-green-900 text-black px-2 uppercase italic">Global Pulse</h2>
                 <div class="space-y-4">
                     <div>
-                        <p class="text-xs uppercase">Est. Global Population</p>
+                        <p class="text-[10px] uppercase opacity-60 italic">World Population (Est)</p>
                         <p id="pop-val" class="text-4xl font-black text-white glow">SYNCING...</p>
                     </div>
                     <div>
-                        <p class="text-xs uppercase">CO2 Emissions (Tons)</p>
+                        <p class="text-[10px] uppercase opacity-60 italic">CO2 Emissions (Tons)</p>
                         <p id="co2-val" class="text-2xl font-bold text-red-500">---</p>
                     </div>
                 </div>
             </div>
             
-            <div class="border-neon p-6 bg-green-950/10 h-full">
-                <h2 class="text-xl font-bold mb-4 opacity-80 underline">VALIDATION_LOGS</h2>
-                <div id="logs" class="text-xs space-y-2 overflow-hidden">
-                    <div class="text-yellow-500 italic">[SYSTEM] Initializing Kiosk Data Sync...</div>
+            <div class="border-neon p-6 bg-matrix h-[45vh]">
+                <h2 class="text-xl font-bold mb-4 opacity-80 underline">VALIDATION_STREAM</h2>
+                <div id="logs" class="text-[10px] space-y-2 overflow-hidden font-light">
+                    <div class="text-yellow-500 italic">> Booting system nodes...</div>
                 </div>
             </div>
         </div>
 
         <div class="col-span-2 space-y-8">
-            <div class="border-neon p-10 flex items-center justify-center bg-green-900/5 h-2/3">
+            <div class="border-neon p-10 flex items-center justify-center bg-matrix h-2/3">
                 <div class="text-center">
-                    <p class="text-2xl uppercase tracking-[1em] mb-4">WEF 2026 Narrative</p>
+                    <p class="text-2xl uppercase tracking-[0.8em] mb-4 opacity-50">Global Agenda 2026</p>
                     <h3 class="text-7xl font-black text-white glow mb-6">"A SPIRIT OF DIALOGUE"</h3>
                     <div class="flex justify-around text-xl border-t border-green-900 pt-6">
+                        <div>ECONOMY: <span class="text-blue-500">MONITORING</span></div>
                         <div>RISK: <span class="text-red-500">GEOECONOMIC</span></div>
-                        <div>STATUS: <span class="text-blue-500">MONITORING</span></div>
-                        <div>TREND: <span class="text-yellow-500">STABLE</span></div>
+                        <div>TREND: <span id="trend-status" class="text-yellow-500 font-bold italic underline">ANALYZING</span></div>
                     </div>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 gap-8 h-1/3">
-                <div class="border-neon p-4 bg-slate-900/40">
-                    <h4 class="text-sm font-bold border-b border-green-900 mb-2">FINANCIAL_INDEX_2026</h4>
-                    <p class="text-3xl text-white font-bold">BTC: $142,500 <span class="text-green-500 text-sm">▲</span></p>
-                    <p class="text-3xl text-white font-bold">GOLD: $2,840 <span class="text-green-500 text-sm">▲</span></p>
+                <div class="border-neon p-4 bg-matrix relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-1 bg-green-900 text-[8px] text-black font-bold uppercase">Malaysia_Live</div>
+                    <h4 class="text-xs font-bold border-b border-green-900 mb-2">MY_EXPENDITURE_PACING (RM)</h4>
+                    <p class="text-[10px] uppercase opacity-50">Spent Since Jan 1, 2026:</p>
+                    <p id="msia-total" class="text-3xl text-white font-bold glow tracking-widest">RM 0.00</p>
+                    <p class="text-[10px] mt-2 italic text-blue-400">Current Rate: RM <span id="msia-rate">0.00</span> / sec</p>
                 </div>
-                <div class="border-neon p-4 bg-slate-900/40">
-                    <h4 class="text-sm font-bold border-b border-green-900 mb-2">ACADEMIC_RESEARCH_PULSE</h4>
-                    <p class="text-lg">AI VALIDATION: <span class="text-white">ACTIVE</span></p>
-                    <p class="text-lg">QUANTUM_NODES: <span class="text-white">8,402 ONLINE</span></p>
+
+                <div class="border-neon p-4 bg-matrix">
+                    <h4 class="text-xs font-bold border-b border-green-900 mb-2">NODE_HEALTH_STATUS</h4>
+                    <div class="grid grid-cols-2 gap-2 text-[10px]">
+                        <p>SCRAPER_UNIT: <span class="text-white">ONLINE</span></p>
+                        <p>VALIDATOR_V6: <span class="text-white">STABLE</span></p>
+                        <p>FINANCE_MOD: <span class="text-white">ACTIVE</span></p>
+                        <p>UPTIME: <span id="uptime-val" class="text-white">0s</span></p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // 1. Fungsi Jam Masa-Nyata (UK Format)
+        let startTime = Date.now();
+
+        // 1. Clock & Uptime
         setInterval(() => {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString('en-GB');
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString('en-GB');
+            document.getElementById('uptime-val').innerText = Math.floor((Date.now() - startTime)/1000) + "s";
         }, 1000);
 
-        // 2. Fungsi Utama: Kiosk Data Sync dari JSON Sebenar
+        // 2. Data Sync Function
         async function syncKioskData() {
             try {
                 const response = await fetch('../data/logs/worldometer_live.json');
+                if (!response.ok) throw new Error('Log not ready');
                 
-                if (!response.ok) {
-                    addKioskLog("[WARN] Log file not found. Waiting for GitHub Action...");
-                    return;
-                }
-
                 const data = await response.json();
                 
                 if (data && data.metrics) {
-                    // Update Paparan Populasi
+                    // Update World Stats
                     document.getElementById('pop-val').innerText = parseInt(data.metrics.current_population).toLocaleString();
-                    
-                    // Update Paparan CO2
                     if(data.metrics.co2_emissions_tons) {
                         document.getElementById('co2-val').innerText = parseInt(data.metrics.co2_emissions_tons).toLocaleString();
                     }
 
-                    // Tambah Log Kejayaan
-                    const timeOnly = data.timestamp.split('T')[1].split('.')[0];
-                    addKioskLog(`[SUCCESS] Data Ingested: ${data.status} | TS: ${timeOnly}`);
+                    // Update Malaysia Finance Data
+                    if(data.finance && data.finance.Malaysia) {
+                        document.getElementById('msia-total').innerText = "RM " + data.finance.Malaysia.total_spent_so_far.toLocaleString(undefined, {minimumFractionDigits: 2});
+                        document.getElementById('msia-rate').innerText = data.finance.Malaysia.spend_per_second.toLocaleString();
+                    }
+
+                    document.getElementById('trend-status').innerText = "STABLE_SYNC";
+                    addKioskLog(`[SUCCESS] Data Packet Ingested | Status: ${data.status}`);
                 }
             } catch (e) {
-                addKioskLog("[ERROR] Sync Failed. Check Repository Data Path.");
+                addKioskLog("[WARN] Waiting for World-Log-Stream...");
+                document.getElementById('trend-status').innerText = "RECONNECTING...";
             }
         }
 
-        // 3. Fungsi Log Scroller
+        // 3. Log Console Stream
         function addKioskLog(message) {
             const logsDiv = document.getElementById('logs');
             const entry = document.createElement('div');
-            entry.className = "text-[10px] opacity-80 border-l border-green-900 pl-2";
+            entry.className = "border-l border-green-900 pl-2 py-1";
             entry.innerText = `> [${new Date().toLocaleTimeString()}] ${message}`;
-            
             logsDiv.prepend(entry);
-            
-            // Simpan hanya 10 log terakhir untuk kebersihan UI
-            if (logsDiv.children.length > 10) {
-                logsDiv.lastChild.remove();
-            }
+            if (logsDiv.children.length > 12) logsDiv.lastChild.remove();
         }
 
-        // Jalankan Sync Pertama & Ulangi Setiap 60 Saat
+        // Random Activity Sim (For Visual Effect)
+        const sysMsg = ["GDELT_INDEX: Analyzing...", "CORE_VALID: OK", "SYNC: Node_01", "QUERY: OpenAlex_API"];
+        setInterval(() => {
+            addKioskLog(sysMsg[Math.floor(Math.random() * sysMsg.length)]);
+        }, 5000);
+
+        // Run sync every 60s
         syncKioskData();
         setInterval(syncKioskData, 60000);
-
-        // Simulasi Log Aktiviti Tambahan (Supaya Kiosk Nampak 'Sibuk')
-        const systemMessages = [
-            "GDELT_API: Analyzing political sentiment...",
-            "DB_WORLD_LOG: All nodes active.",
-            "CORE_VALIDATOR: Integrity check passed.",
-            "WEF_INTEL: Monitoring risk nodes..."
-        ];
-
-        setInterval(() => {
-            const randomMsg = systemMessages[Math.floor(Math.random() * systemMessages.length)];
-            addKioskLog(`[INFO] ${randomMsg}`);
-        }, 8000);
-
     </script>
 </body>
 </html>
