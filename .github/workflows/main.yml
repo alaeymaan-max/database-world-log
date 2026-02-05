@@ -1,0 +1,36 @@
+name: DWL Auto Monitoring 2026
+
+on:
+  schedule:
+    # Menjalankan skrip setiap jam
+    - cron: '0 * * * *'
+  workflow_dispatch: # Membolehkan anda jalan secara manual untuk testing
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install requests beautifulsoup4
+
+      - name: Run Global Monitoring
+        run: python main.py
+        # Nota: main.py akan menjalankan satu kitaran dan tamat
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'DWL-Bot'
+          git config --global user.email 'dwl-bot@users.noreply.github.com'
+          git add data/logs/*.json
+          git commit -m "Automated log update: $(date)" || echo "No changes to commit"
+          git push
